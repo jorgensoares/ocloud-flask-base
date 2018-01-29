@@ -1,0 +1,128 @@
+{% extends "layout.html" %}
+{% block title %}Profile{% endblock %}
+{% block section %}Profile{% endblock %}
+{% block content %}
+      <!-- Default box -->
+      <div class="row">
+        <div class="col-md-3">
+          <!-- Profile Image -->
+          <div class="box box-primary">
+            <div class="box-body box-profile">
+              <img class="profile-user-img img-responsive img-circle" src="/static/images/{{ current_user.username }}.png" alt="User profile picture">
+
+              <h3 class="profile-username text-center">{{ current_user.first_name }} {{ current_user.last_name }}</h3>
+
+              <p class="text-muted text-center">{{ current_user.username }}</p>
+
+
+              <form method=post action="/manager/profile/picture" enctype=multipart/form-data>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <label class="custom-file">
+                  <input type="file" id="file" name=file class="custom-file-input">
+                  <span class="custom-file-control"></span>
+                </label>
+                <button type="submit" class="btn btn-primary btn-block"><b>Change Profile Picture</b></button>
+               </form>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-9">
+          <div class="box box-default">
+            <div class="box-header with-border">
+              <h3 class="box-title">Update Details</h3>
+            </div>
+            <!-- /.box-header -->
+            <form action="/manager/profile" method="post">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+              <div class="box-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <fieldset disabled>
+                      <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" value="{{ current_user.username }}">
+                      </div>
+                    </fieldset>
+                    <div class="form-group">
+                      <label for="first_name">First Name</label>
+                      <input type="text" class="form-control" id="first_name" name="first_name" value="{{ current_user.first_name }}">
+                    </div>
+                    <div class="form-group">
+                      <label for="email">Email</label>
+                      <input type="email" class="form-control" id="email" name="email" value="{{ current_user.email }}">
+                    </div>
+                    <div class="form-group">
+                      <div class="checkbox">
+                        <label>
+                          {% if current_user.email_alert == 'yes' %}
+                            <input type="checkbox" name="email_alerts" value="yes" checked> Receive E-Mail Alerts
+                          {% else %}
+                            <input type="checkbox" name="email_alerts" value="yes"> Receive E-Mail Alerts
+                          {% endif %}
+                        </label>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="checkbox">
+                        <label>
+                          {% if current_user.sms_alert == 'yes' %}
+                            <input type="checkbox" name="sms_alerts" value="yes" checked> Receive SMS Alerts
+                          {% else %}
+                            <input type="checkbox" name="sms_alerts" value="yes"> Receive SMS Alerts
+                          {% endif %}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-md-6">
+                    <fieldset disabled>
+                      <div class="form-group">
+                        <label for="role">Role</label>
+                        <input type="text" class="form-control" id="role" name="role" value="{{ current_user.role }}">
+                      </div>
+                    </fieldset>
+                    <div class="form-group">
+                      <label for="last_name">Last Name</label>
+                      <input type="text" class="form-control" id="last_name" name="last_name" value="{{ current_user.last_name }}">
+                    </div>
+                    <div class="form-group">
+                      <label for="phone">Phone Number</label>
+                      <input type="tel" class="form-control" id="phone" name="phone" value="{{ current_user.phone }}">
+                    </div>
+                  </div>
+                  <!-- /.col -->
+                </div>
+                <!-- /.row -->
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer">
+                <button type="submit" class="btn btn-primary pull-right">Submit</button>
+              </div>
+            </form>
+          </div>
+          <!-- /.nav-tabs-custom -->
+        </div>
+        <!-- /.col -->
+      </div>
+
+{% endblock %}
+
+{% block jquery %}
+{{ super() }}
+<script>
+  $custom-file-text: (
+  placeholder: (
+    en: "Choose Picture"
+  ),
+  button-label: (
+    en: "Browse"
+  )
+);
+</script>
+</body>
+</html>
+{% endblock %}

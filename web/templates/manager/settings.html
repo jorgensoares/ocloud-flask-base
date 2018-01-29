@@ -1,0 +1,381 @@
+{% extends "layout.html" %}
+{% block title %}Settings{% endblock %}
+{% block section %}Settings{% endblock %}
+{% block content %}
+      <!-- Default box -->
+      <div class="box">
+        <div class="box-header with-border">
+          <h3 class="box-title">Update Settings</h3>
+        </div>
+        <form action="/settings" method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="box-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="box">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Server</h3>
+                </div>
+                <div class="box-body">
+                  <div class="form-group row">
+                    <label for="server_ip" class="col-sm-2 col-form-label"> URL</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="server_ip" name="server_ip"
+                             value="{{ settings['SERVER_IP'] }}" placeholder="URL or IP address" required>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="log" class="col-sm-2 col-form-label"> Log file location</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="log" name="log"
+                             value="{{ settings['LOG'] }}" placeholder="Path to log file" required>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="upload_folder" class="col-sm-2 col-form-label">Avatar's Folder</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="upload_folder" name="upload_folder"
+                             value="{{ settings['UPLOAD_FOLDER'] }}" placeholder="Path to users avatar folder" required>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label for="recaptcha_public_key" class="col-sm-2 col-form-label">Recaptcha Pub. Key </label>
+                    <div class="col-sm-10">
+                      <input type="password" class="form-control" id="recaptcha_public_key" name="recaptcha_public_key"
+                             value="{{ settings['RECAPTCHA_PUBLIC_KEY'] }}" placeholder="Recaptcha Public Key">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="recaptcha_private_key" class="col-sm-2 col-form-label">Recaptcha Priv. Key </label>
+                    <div class="col-sm-10">
+                      <input type="password" class="form-control" id="recaptcha_private_key" name="recaptcha_private_key"
+                             value="{{ settings['RECAPTCHA_PRIVATE_KEY'] }}" placeholder="Recaptcha Private Key">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="secret_key" class="col-sm-2 col-form-label">Server Secret Key</label>
+                    <div class="col-sm-10">
+                      <input type="password" class="form-control" id="secret_key" name="secret_key"
+                             value="{{ settings['SECRET_KEY'] }}" placeholder=" Server Secret Key">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-offset-2 col-sm-3">
+                      <div class="form-group row">
+                        <label class="col-sm-2">Debug</label>
+                        <div class="col-sm-10">
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              {% if settings['DEBUG'] == True %}
+                                <input class="form-check-input" value="True" name="debug" type="checkbox" checked>
+                              {% else %}
+                                <input class="form-check-input" value="True" name="debug" type="checkbox">
+                              {% endif %}
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-3">
+                      <div class="form-group row">
+                        <label class="col-sm-2">Recaptcha</label>
+                        <div class="col-sm-10">
+                          <div class="form-check">
+                            <label class="form-check-label">
+                               {% if settings['RECAPTCHA'] == True %}
+                                <input class="form-check-input" value="True" name="recaptcha" type="checkbox" checked>
+                              {% else %}
+                                <input class="form-check-input" value="True" name="recaptcha" type="checkbox">
+                              {% endif %}
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-3">
+                      <div class="form-group row">
+                        <label class="col-sm-2">CSRF</label>
+                        <div class="col-sm-10">
+                          <div class="form-check">
+                            <label class="form-check-label">
+                               {% if settings['WTF_CSRF_ENABLED'] == True %}
+                                <input class="form-check-input" value="True" name="csrf_enabled" type="checkbox" checked>
+                              {% else %}
+                                <input class="form-check-input" value="True" name="csrf_enabled" type="checkbox">
+                              {% endif %}
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.box-body -->
+              </div>
+            </div>
+            <!-- /.col -->
+            <div class="col-md-6">
+              <div class="box">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Database</h3>
+                </div>
+                <div class="box-body">
+                  <div class="form-group">
+                    <label class="mr-sm-2" for="db_type">Database Type &nbsp;&nbsp;</label>
+                    <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="db_type" name="db_type"  required>
+                      {% if settings['DATABASE_TYPE'] == 'mysql' %}
+                        <option value="mysql" selected>MySQL</option>
+                      {% else %}
+                         <option value="mysql">MySQL</option>
+                      {% endif %}
+                      {% if settings['DATABASE_TYPE'] == 'sqlite' %}
+                        <option value="sqlite" selected>SQLite</option>
+                      {% else %}
+                         <option value="sqlite">SQLite</option>
+                      {% endif %}
+                      {% if settings['DATABASE_TYPE'] == 'pgsql' %}
+                        <option value="pgsql" selected>PgSQL</option>
+                      {% else %}
+                         <option value="pgsql">PgSQL</option>
+                      {% endif %}
+                    </select>
+                  </div>
+                  <div class="form-group row">
+                    <label for="db_name" class="col-sm-2 col-form-label"> Database</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="db_name" name="db_name"
+                             value="{{ settings['DATABASE_NAME'] }}" placeholder="Database name"
+                             placeholder="Server URL or IP for SQLite use path to db file" required>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="db_server" class="col-sm-2 col-form-label"> Server</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="db_server" name="db_server"
+                             value="{{ settings['DATABASE_HOST'] }}"placeholder="Server URL or IP" >
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="db_port" class="col-sm-2 col-form-label"> Port</label>
+                    <div class="col-sm-10">
+                      <input type="number" class="form-control" id="db_port" name="db_port"
+                             value="{{ settings['DATABASE_PORT'] }}" placeholder="Server port">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="db_username" class="col-sm-2 col-form-label"> Username</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="db_username" name="db_username"
+                             value="{{ settings['DATABASE_USER'] }}" placeholder="Database user">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="db_password" class="col-sm-2 col-form-label"> Password</label>
+                    <div class="col-sm-10">
+                      <input type="password" class="form-control" id="db_password" name="db_password"
+                             value="{{ settings['DATABASE_PASSWORD'] }}" placeholder="Password">
+                    </div>
+                  </div>
+                </div>
+                <!-- /.box-body -->
+              </div>
+              <div class="box">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Email</h3>
+                </div>
+                <div class="box-body">
+                  <div class="form-group row">
+                    <label class="col-sm-2">Enabled</label>
+                    <div class="col-sm-10">
+                      <div class="form-check">
+                        <label class="form-check-label">
+                          {% if settings['MAIL'] == True %}
+                            <input class="form-check-input" value="True" name="mail_enabled" type="checkbox" checked>
+                          {% else %}
+                            <input class="form-check-input" value="True" name="mail_enabled" type="checkbox">
+                          {% endif %}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="mail_server" class="col-sm-2 col-form-label"> Server</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="mail_server" name="mail_server"
+                             value="{{ settings['MAIL_SERVER'] }}" placeholder="Email server">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="mail_port" class="col-sm-2 col-form-label"> Port</label>
+                    <div class="col-sm-10">
+                      <input type="number" class="form-control" id="mail_port" name="mail_port"
+                             value="{{ settings['MAIL_PORT'] }}" placeholder="Server Port">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="mail_username" class="col-sm-2 col-form-label"> Username</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="mail_username" name="mail_username"
+                             value="{{ settings['MAIL_USERNAME'] }}" placeholder="Email server username">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="mail_default_sender" class="col-sm-2 col-form-label"> Sender</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="mail_default_sender" name="mail_default_sender"
+                             value="{{ settings['MAIL_DEFAULT_SENDER'] }}" placeholder="Default mail sender ">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="mail_password" class="col-sm-2 col-form-label"> Password</label>
+                    <div class="col-sm-10">
+                      <input type="password" class="form-control" id="mail_password" name="mail_password"
+                             value="{{ settings['MAIL_PASSWORD'] }}" placeholder="Password">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-offset-2 col-sm-3">
+                      <div class="form-group row">
+                        <label class="col-sm-2">SSL</label>
+                        <div class="col-sm-10">
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              {% if settings['MAIL_USE_SSL'] == True %}
+                                <input class="form-check-input" value="True" name="mail_use_ssl" type="checkbox" checked>
+                              {% else %}
+                                <input class="form-check-input" value="True" name="mail_use_ssl" type="checkbox">
+                              {% endif %}
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-3">
+                      <div class="form-group row">
+                        <label class="col-sm-2">TLS</label>
+                        <div class="col-sm-10">
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              {% if settings['MAIL_USE_TLS'] == True %}
+                                <input class="form-check-input" value="True" name="mail_use_tls" type="checkbox" checked>
+                              {% else %}
+                                <input class="form-check-input" value="True" name="mail_use_tls" type="checkbox">
+                              {% endif %}
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.box-body -->
+              </div>
+            </div>
+            <!-- /.col -->
+          </div>
+        </div>
+        <div class="box-footer">
+           <button type="submit" class="btn btn-primary pull-right">Update</button>
+        </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block footer %}
+{{ super() }}
+  <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
+              </div>
+              <div class="modal-body">
+                  <p>You are about to delete <b><i class="title"></i></b> this procedure is irreversible.</p>
+                  <p>Do you want to proceed?</p>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  <button type="button" class="btn btn-danger btn-ok">Delete</button>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="modal fade" id="edit-client" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form action="/settings" method="post">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="myModalLabel1">Edit Client - <i class="title"></i></h4>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+             <div class="form-group">
+              <label for="inputPassword4">New IP or URL</label>
+              <input type="password" id="inputPassword4" class="form-control mx-sm-3" aria-describedby="passwordHelpInline">
+            </div>
+
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox10" value="option1"> Sensors
+              </label>
+            </div>
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox11" value="option2"> Relays
+              </label>
+            </div>
+            <div class="form-check form-check-inline disabled">
+              <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox12" value="option3"> Monitoring
+              </label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-success btn-ok">Edit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block jquery %}
+{{ super() }}
+<script>
+    $('#confirm-delete').on('click', '.btn-ok', function(e) {
+        var $modalDiv = $(e.delegateTarget);
+        var id = $(this).data('recordId');
+        var csrf_token = "{{ csrf_token() }}";
+        $.ajaxSetup({
+          beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+              }
+            }
+        });
+
+        $.ajax({url: '/client/delete/' + id, type: 'POST'})
+        //$.post('/cliente/delete/' + id).then()
+        $modalDiv.addClass('loading');
+        $('[data-record-id=' + id + ']').remove();
+        setTimeout(function() {
+            $modalDiv.modal('hide').removeClass('loading');
+        }, 1000)
+    });
+    $('#confirm-delete').on('show.bs.modal', function(e) {
+        var data = $(e.relatedTarget).data();
+        $('.title', this).text(data.recordTitle);
+        $('.btn-ok', this).data('recordId', data.recordId);
+    });
+
+    $('#edit-client').on('show.bs.modal', function(e) {
+        var data = $(e.relatedTarget).data();
+        $('.title', this).text(data.recordTitle);
+    });
+</script>
+
+{% endblock %}

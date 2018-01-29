@@ -1,0 +1,24 @@
+__pycache__
+*.conf
+*.log
+.bak
+*\*.bak
+*\random_seed
+*\*.asc
+*.sql
+
+# Development files:
+*.py[co]
+*.sw[po]
+uxenv/
+winenv/
+.idea/
+*.iml
+*.whl
+=======
+.idea/
+
+.cache/
+.coverage
+.eggs/
+*.egg-info/
